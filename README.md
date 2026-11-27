@@ -17,6 +17,10 @@ description: Shown in search results and link previews
 ---
 ```
 
+## Home page
+
+`index.md` is the page at `/`. It lists every page in file-tree order: folders first, then files, A→Z. The list is generated on each build, so a new page shows up there when you push it. To leave a page out, add `toc: false` to its front matter.
+
 ## Theme
 
 - `assets/style.css`: all styling. Change the variables at the top to restyle every page (light and dark).
@@ -39,7 +43,7 @@ npm run dev        # http://localhost:8080/policy/stellar-focus.html
 
 `GET /health` returns `200 ok` with `Cache-Control: no-store`. The image's `HEALTHCHECK` calls it every 30 s, so Docker Swarm (Dokploy) restarts the container if Caddy stops answering.
 
-The Uptime Kuma monitor is created by [dokploy-bridge](https://github.com/prabhask5/dokploy-bridge). The site root `/` is a 404, so the Dokploy app's description must point the bridge at the health endpoint:
+The Uptime Kuma monitor is created by [dokploy-bridge](https://github.com/prabhask5/dokploy-bridge). Point the bridge at the health endpoint in the Dokploy app's description (otherwise it checks the home page):
 
 ```
 health: /health
