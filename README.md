@@ -21,6 +21,7 @@ description: Shown in search results and link previews
 
 - `assets/style.css`: all styling. Change the variables at the top to restyle every page (light and dark).
 - `_includes/base.njk`: the HTML shell every page renders into.
+- `assets/icon.svg`: the favicon (`apple-touch-icon.png` and `icon-512.png` are PNG copies; `icon-512.png` is also the Dokploy app icon).
 - To give one page its own look, create `_includes/other.njk` and set `layout: other.njk` in that page's front matter.
 
 ## Run locally
