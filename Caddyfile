@@ -1,0 +1,24 @@
+# Plain HTTP on :80. Dokploy's Traefik terminates TLS for static.prabhas.io.
+{
+	admin off
+}
+
+:80 {
+	root * /srv
+	encode zstd gzip
+
+	# /policy/stellar-focus.html -> /policy/stellar-focus
+	@html path_regexp html ^(.+)\.html$
+	redir @html {re.html.1} 301
+
+	# /policy/stellar-focus -> serves policy/stellar-focus.html
+	try_files {path} {path}.html {path}index.html
+	file_server
+
+	header /assets/* Cache-Control "public, max-age=3600"
+
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}
