@@ -7,6 +7,12 @@
 	root * /srv
 	encode zstd gzip
 
+	# Health check for Uptime Kuma and the Docker HEALTHCHECK.
+	handle /health {
+		header Cache-Control "no-store"
+		respond "ok" 200
+	}
+
 	# /policy/stellar-focus.html -> /policy/stellar-focus
 	@html path_regexp html ^(.+)\.html$
 	redir @html {re.html.1} 301

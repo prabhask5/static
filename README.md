@@ -34,9 +34,21 @@ npm run dev        # http://localhost:8080/policy/stellar-focus.html
 
 `Dockerfile` builds the site with [Eleventy](https://www.11ty.dev) and copies the HTML into a `caddy:2-alpine` image. `Caddyfile` serves `/policy/stellar-focus` from `policy/stellar-focus.html`, redirects `.html` URLs to the clean path, and serves `404.md` for missing pages. Caddy listens on plain HTTP port 80. TLS is handled in front of it by Traefik (Dokploy) and Cloudflare.
 
+## Health check
+
+`GET /health` returns `200 ok` with `Cache-Control: no-store`. The image's `HEALTHCHECK` calls it every 30 s, so Docker Swarm (Dokploy) restarts the container if Caddy stops answering.
+
+The Uptime Kuma monitor is created by [dokploy-bridge](https://github.com/prabhask5/dokploy-bridge). The site root `/` is a 404, so the Dokploy app's description must point the bridge at the health endpoint:
+
+```
+health: /health
+keyword: ok
+```
+
 ## Deploy (Dokploy)
 
 1. Create Application → Provider: GitHub → this repo, branch `main`.
 2. Build Type: **Dockerfile**, Docker File: `Dockerfile`.
 3. Domains → add `static.prabhas.io`, container port **80**.
-4. Deploy. Auto Deploy rebuilds on every push to `main`.
+4. Description → the `health:` / `keyword:` lines above.
+5. Deploy. Auto Deploy rebuilds on every push to `main`.
